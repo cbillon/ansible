@@ -1,0 +1,55 @@
+# playbooks/setup-coon.yml - base configuration for all servers
+---
+- name: Configure common settings on all servers
+  hosts: all
+  become: yes  # Run tasks with sudo
+
+  vars:
+    created_username: "{{ lookup('ansible.builtin.env', 'USER') }}"
+    common_packages:
+      - htop
+      - curl
+      - wget
+      - git
+      - gitk
+      - tmux
+      - ufw
+      - lm-sensors
+
+  tasks:
+    - name: Update apt cache (Debian/Ubuntu)
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600  # Only update if cache is older than 1 hour
+      when: ansible_os_family == "Debian"
+
+    - name: Install common packages (Debian/Ubuntu)
+      apt:
+        name: "{{ common_packages }}"
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Set timezone to UTC
+      timezone:
+        name: Europe/Paris
+
+    - name: Ensure NTP is installed and running
+      package:
+        name: chrony
+        state: present
+
+    - name: Start and enable chronyd service
+      service:
+        name: chronyd
+        state: started
+        enabled: yes
+
+    # - name: UFW - Allow SSH connections
+    #   community.general.ufw:
+    #     rule: allow
+    #     name: OpenSSH
+
+    # - name: UFW - Disable and deny by default
+    #   community.general.ufw:
+    #     state: enabled
+    #     default: deny
