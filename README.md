@@ -121,3 +121,10 @@ creates locally ~/.ssh/include.d/<remote server name>
 copy pubkey to remote ~/.ssh/authorizedkeys
 
 You can connect directly ssh <remote server name>
+
+### direnv
+
+direnv est installé
+configuration
+- .envrc contient dotenv versionné avec git
+- .env liste des variables export <name>=<value>  mis dans .gitignore

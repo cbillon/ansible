@@ -7,6 +7,7 @@
   vars:
     created_username: "{{ lookup('ansible.builtin.env', 'USER') }}"
     common_packages:
+      - direnv
       - htop
       - curl
       - wget
@@ -17,6 +18,7 @@
       - lm-sensors
 
   tasks:
+
     - name: Update apt cache (Debian/Ubuntu)
       apt:
         update_cache: yes
@@ -28,6 +30,13 @@
         name: "{{ common_packages }}"
         state: present
       when: ansible_os_family == "Debian"
+
+    - name: insert line if not present
+      lineinfile:
+        state: present
+        path: "/home/{{ created_username }}/.bashrc"
+        line: "eval \"$(direnv hook bash)\""
+        create: false      
 
     - name: Set timezone to UTC
       timezone:
