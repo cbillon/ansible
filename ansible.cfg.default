@@ -1,7 +1,7 @@
 	# ansible.cfg - global-level configuration
 [defaults]
 # Path to inventory file (can also be a directory)
-inventory = /etc/ansible/hosts
+inventory = ./hosts
 
 # SSH private key for authentication
 private_key_file = ~/.ssh/id_ed25519

@@ -1,0 +1,14 @@
+# inventory/hosts.ini - define managed hosts and groups
+
+# Individual hosts with connection details
+[servers]
+UBox2 ansible_host=192.168.1.73
+
+# Group of groups - useful for applying common configurations
+[test:children]
+servers
+
+# Variables applied to all hosts in a group
+[servers:vars]
+http_port=80
+https_port=443
